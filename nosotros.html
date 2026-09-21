@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos - Christian's Muebles</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Estilos adicionales específicos para la página de productos */
+    .productos-page {
+      background: #f3f3f3;
+      padding: 140px 20px 80px;
+      min-height: 100vh;
+    }
+
+    .productos-page h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    .productos-page .sub-header {
+      text-align: center;
+      color: #666;
+      margin-bottom: 60px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Grid de categorías */
+    .categorias-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+    }
+
+    .categoria-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .categoria-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .categoria-header {
+      background: #1e293b;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .categoria-header h2 {
+      color: #d4af37;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .categoria-header h2 img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+
+    .categoria-header h2 .material-icons {
+      font-size: 32px;
+      color: #d4af37;
+    }
+
+    .categoria-desc {
+      text-align: center;
+      padding: 15px;
+      font-family: 'Inter', sans-serif;
+      color: #555;
+      font-size: 14px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .productos-mini {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 15px;
+    }
+
+    .productos-mini img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .productos-mini img:hover {
+      transform: scale(1.05);
+    }
+
+    .categoria-footer {
+      padding: 15px;
+      text-align: center;
+      border-top: 1px solid #eee;
+    }
+
+    .categoria-footer .whatsapp-btn {
+      margin: 0;
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+
+    /* Modal para ver imágenes ampliadas */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 40px;
+      color: white;
+      font-size: 40px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .productos-page {
+        padding: 120px 15px 60px;
+      }
+
+      .productos-page h1 {
+        font-size: 32px;
+      }
+
+      .categorias-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .productos-mini {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .productos-mini img {
+        height: 90px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .productos-mini img {
+        height: 80px;
+      }
+      
+      .categoria-header h2 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER (mismo que index) -->
+<header class="header">
+  <div class="logo" aria-label="Logo de la empresa">
+     <a href="index.html">
+    <img src="images/imagenlogo3.png" alt="Christian's Muebles">
+     </a>
+  </div>
+
+  <nav class="nav" aria-label="Navegación principal">
+    <a href="index.html">Inicio</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="productos.html">Productos</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+
+  <button class="menu-btn" aria-label="Menú" aria-expanded="false">☰</button>
+</header>
+
+<!-- MENÚ MÓVIL -->
+<div class="mobile-menu" id="mobileMenu">
+  <nav class="mobile-nav">
+    <a href="index.html">Inicio</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="productos.html">Productos</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+</div>
+
+<!-- PÁGINA DE PRODUCTOS -->
+<section class="productos-page">
+
+
+
+
+
+
+<!-- ===== SECCIÓN NOSOTROS - DISEÑO INDUSTRIAL ===== -->
+<section id="nosotros" class="seccion-nosotros-v3">
+  
+  <!-- BANNER PRINCIPAL CON EFECTO MADERA -->
+  <div class="v3-banner-principal">
+    <div class="v3-banner-overlay">
+      <div class="v3-banner-contenido">
+       
+        <h1>TU SUEÑO, <span>HECHO MUEBLE</span></h1>
+        <div class="v3-linea-madera"></div>
+        <p class="v3-banner-texto">
+          Especialistas en diseño, fabricación y comercialización de muebles en melamina 
+          para hogares, oficinas, empresas y espacios comerciales.
+        </p>
+        <div class="v3-stats">
+          <div class="v3-stat">
+            <span class="v3-numero">14+</span>
+            <span class="v3-label">Años de experiencia</span>
+          </div>
+          <div class="v3-stat">
+            <span class="v3-numero">500+</span>
+            <span class="v3-label">Proyectos realizados</span>
+          </div>
+          <div class="v3-stat">
+            <span class="v3-numero">100%</span>
+            <span class="v3-label">Satisfacción garantizada</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRASE DESTACADA CON FONDO METÁLICO -->
+  <div class="v3-frase-metal">
+    <div class="v3-frase-contenido">
+      <span class="v3-comillas">"</span>
+      <p>
+        <strong>Creamos soluciones personalizadas</strong> que combinan diseño, funcionalidad, 
+        calidad y excelentes acabados, aprovechando cada espacio al máximo.
+      </p>
+    </div>
+  </div>
+
+  <!-- CATEGORÍAS ESTILO TABLERO -->
+  <div class="v3-categorias-tablero">
+    <h2 class="v3-titulo-seccion">
+      <span class="v3-titulo-linea"></span>
+      CREAMOS ESPACIOS PARA TI
+      <span class="v3-titulo-linea"></span>
+    </h2>
+    <div class="v3-tablero-grid">
+      <div class="v3-tablero-item">
+        <div class="v3-tablero-icono">🍳</div>
+        <h4>Cocinas modernas</h4>
+        <p>Funcionales y elegantes</p>
+      </div>
+      <div class="v3-tablero-item">
+        <div class="v3-tablero-icono">🚪</div>
+        <h4>Closets a medida</h4>
+        <p>Organización total</p>
+      </div>
+      <div class="v3-tablero-item">
+        <div class="v3-tablero-icono">🛏️</div>
+        <h4>Dormitorios</h4>
+        <p>Calidez y confort</p>
+      </div>
+      <div class="v3-tablero-item">
+        <div class="v3-tablero-icono">🏢</div>
+        <h4>Oficinas</h4>
+        <p>Productividad y diseño</p>
+      </div>
+      <div class="v3-tablero-item">
+        <div class="v3-tablero-icono">🏪</div>
+        <h4>Comerciales</h4>
+        <p>Soluciones para negocios</p>
+      </div>
+      <div class="v3-tablero-item">
+        <div class="v3-tablero-icono">🏥</div>
+        <h4>Consultorios</h4>
+        <p>Confort profesional</p>
+      </div>
+      <div class="v3-tablero-item">
+        <div class="v3-tablero-icono">📚</div>
+        <h4>Educativos</h4>
+        <p>Espacios que inspiran</p>
+      </div>
+      <div class="v3-tablero-item">
+        <div class="v3-tablero-icono">🎨</div>
+        <h4>Personalizados</h4>
+        <p>Tu idea, nuestro diseño</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISEÑO 3D CON EFECTO TARJETA -->
+  <div class="v3-card-3d">
+    <div class="v3-3d-contenido">
+      <div class="v3-3d-icono">
+        <i class="fas fa-cube"></i>
+        <span>3D</span>
+      </div>
+      <div class="v3-3d-texto">
+        <h3>DISEÑO 3D</h3>
+        <p class="v3-3d-sub">Visualiza tu proyecto antes de fabricarlo</p>
+        <p>Desarrollamos propuestas personalizadas para que puedas imaginar y definir cada detalle de tu futuro espacio.</p>
+        <div class="v3-3d-tag">⟡ Visualización previa</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSFORMACIÓN TOTAL CON EFECTO PANEL -->
+  <div class="v3-panel-transformacion">
+    <div class="v3-panel-inner">
+      <div class="v3-panel-icono">⚡</div>
+      <h3>TRANSFORMACIÓN TOTAL</h3>
+      <h4>Acabado completo para tu hogar o negocio</h4>
+      <p>
+        ¿Estás planeando una remodelación? ¿Quieres evitar contratar a un especialista diferente para cada trabajo?
+      </p>
+      <div class="v3-panel-destacado">NOSOTROS NOS ENCARGAMOS DE TODO</div>
+      <p class="v3-panel-experiencia">
+        <span class="v3-panel-badge">14+ años</span> de experiencia en el sur del país, ofrecemos soluciones integrales 
+        desde la fabricación hasta los acabados finales.
+      </p>
+    </div>
+  </div>
+
+  <!-- SERVICIOS CON EFECTO CARRUSEL HORIZONTAL -->
+  <div class="v3-servicios-grid">
+    <h2 class="v3-titulo-seccion">
+      <span class="v3-titulo-linea"></span>
+      NUESTROS SERVICIOS
+      <span class="v3-titulo-linea"></span>
+    </h2>
+    <div class="v3-servicios-contenedor">
+      <div class="v3-servicio-item">
+        <div class="v3-servicio-circulo">🔌</div>
+        <h4>Electricidad</h4>
+        <p>Instalaciones seguras y modernas</p>
+      </div>
+      <div class="v3-servicio-item">
+        <div class="v3-servicio-circulo">🔧</div>
+        <h4>Gasfitería</h4>
+        <p>Soluciones para baños y cocinas</p>
+      </div>
+      <div class="v3-servicio-item">
+        <div class="v3-servicio-circulo">🎨</div>
+        <h4>Pintado general</h4>
+        <p>Acabados impecables</p>
+      </div>
+      <div class="v3-servicio-item">
+        <div class="v3-servicio-circulo">🪟</div>
+        <h4>Vidrio y aluminio</h4>
+        <p>Fabricación a medida</p>
+      </div>
+      <div class="v3-servicio-item">
+        <div class="v3-servicio-circulo">💎</div>
+        <h4>Enchapados</h4>
+        <p>Granito, mármol, porcelanato</p>
+      </div>
+      <div class="v3-servicio-item">
+        <div class="v3-servicio-circulo">🚪</div>
+        <h4>Puertas</h4>
+        <p>Madera y metal</p>
+      </div>
+      <div class="v3-servicio-item">
+        <div class="v3-servicio-circulo">🚻</div>
+        <h4>Separadores de baños</h4>
+        <p>Diseño y durabilidad</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAZONES CON EFECTO METÁLICO -->
+  <div class="v3-razones-metal">
+    <h2 class="v3-titulo-seccion">¿POR QUÉ ELEGIR CHRISTIAN'S?</h2>
+    <div class="v3-razones-grid">
+      <div class="v3-razon-item">
+        <div class="v3-razon-numero">01</div>
+        <h4>Experiencia</h4>
+        <p>14+ años de trayectoria</p>
+      </div>
+      <div class="v3-razon-item">
+        <div class="v3-razon-numero">02</div>
+        <h4>Calidad</h4>
+        <p>Materiales y acabados seleccionados</p>
+      </div>
+      <div class="v3-razon-item">
+        <div class="v3-razon-numero">03</div>
+        <h4>Diseño</h4>
+        <p>Personalizado para cada espacio</p>
+      </div>
+      <div class="v3-razon-item">
+        <div class="v3-razon-numero">04</div>
+        <h4>Asesoría</h4>
+        <p>Orientación gratuita</p>
+      </div>
+      <div class="v3-razon-item">
+        <div class="v3-razon-numero">05</div>
+        <h4>Integral</h4>
+        <p>Diseño, fabricación e instalación</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANNER CALIDAD DISEÑO GARANTÍA -->
+  <div class="v3-banner-cdg">
+    <div class="v3-cdg-grid">
+      <div class="v3-cdg-item">
+        <span class="v3-cdg-icono">✦</span>
+        <h3>CALIDAD</h3>
+      </div>
+      <div class="v3-cdg-item">
+        <span class="v3-cdg-icono">✦</span>
+        <h3>DISEÑO</h3>
+      </div>
+      <div class="v3-cdg-item">
+        <span class="v3-cdg-icono">✦</span>
+        <h3>GARANTÍA</h3>
+      </div>
+    </div>
+    <p class="v3-cdg-texto">
+      Aprovechamos cada espacio para convertirlo en un ambiente que realmente disfrutes.
+    </p>
+    <p class="v3-cdg-frase">
+      <span>No solo fabricamos muebles:</span> creamos espacios pensados para tu vida.
+    </p>
+  </div>
+
+  <!-- MISIÓN Y VISIÓN CON EFECTO TARJETA DOBLE -->
+  <div class="v3-mv-grid">
+    <div class="v3-mv-card">
+      <div class="v3-mv-icono">🎯</div>
+      <h3>MISIÓN</h3>
+      <p>
+        Diseñar, fabricar y comercializar muebles de melamina funcionales, innovadores y de alta calidad, 
+        adaptados a las necesidades y espacios de nuestros clientes. Nos comprometemos a ofrecer un 
+        servicio personalizado y acabados de excelencia, utilizando materiales duraderos que garanticen 
+        la máxima satisfacción en cada hogar u oficina.
+      </p>
+    </div>
+    <div class="v3-mv-card">
+      <div class="v3-mv-icono">👁️</div>
+      <h3>VISIÓN</h3>
+      <p>
+        Posicionarnos como la empresa líder en la fabricación y diseño de mobiliario en melamina a nivel 
+        regional, reconocidos por nuestra innovación constante, eficiencia en los procesos y la confianza 
+        que brindamos a nuestros clientes mediante soluciones modernas y accesibles.
+      </p>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+  
+</section>
+
+<!-- FOOTER -->
+<footer id="unique-footer" class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>NUESTROS PRODUCTOS</h3>
+      <ul>
+        <li>Muebles de Cocina</li>
+        <li>Salas de Entretenimiento</li>
+        <li>Muebles de Oficina</li>
+        <li>Muebles de Dormitorio</li>
+        <li>Closets</li>
+        <li>Puertas</li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>UBÍCANOS</h3>
+      <p>
+      <p>
+                📍 TIENDA
+          <p>Calle Piura #394</p>
+          <p>Cruce con Coronel Mendoza — Tacna</p>
+            </p>
+            <p>
+                <h4>📞 LLÁMANOS</h4>
+          <p><strong>963 051 982</strong></p>
+          <p><strong>923 711 418</strong></p>
+            </p>
+    </div>
+
+    <div class="footer-column">
+      <h3>ESCRÍBENOS</h3>
+      <p>¿Quieres comunicarte y solicitar información? Escríbenos por este medio</p>
+      <p>
+        <a href="mailto:muebleschristian@mueblesperu.com">
+          muebleschristian@mueblesperu.com
+        </a>
+      </p>
+    </div>
+
+    <div class="footer-column">
+      <h3>SÍGUENOS EN:</h3>
+      <div class="social-icons">
+        <a href="#">Facebook</a>
+        <a href="#">WhatsApp</a>
+        <a href="#">TikTok</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© Copyright 2024, Christian's Muebles - Todos los Derechos Reservados.</p>
+    <p>Diseño Web <a href="https://www.facebook.com" target="_blank">BRVF®</a></p>
+  </div>
+</footer>
+
+<!-- Modal para ampliar imágenes -->
+<div class="modal" id="imageModal">
+  <span class="modal-close">&times;</span>
+  <img id="modalImage" src="" alt="Imagen ampliada">
+</div>
+
+<script>
+  // ========== MENÚ MÓVIL ==========
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.querySelector('.menu-btn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const overlay = document.createElement('div');
+    overlay.className = 'menu-overlay';
+    document.body.appendChild(overlay);
+    
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', function() {
+        mobileMenu.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+      });
+      
+      overlay.addEventListener('click', function() {
+        mobileMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+      
+      const enlaces = document.querySelectorAll('.mobile-nav a');
+      enlaces.forEach(enlace => {
+        enlace.addEventListener('click', function() {
+          mobileMenu.classList.remove('active');
+          overlay.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+    }
+  });
+
+  // ========== MODAL PARA AMPLIAR IMÁGENES ==========
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  const closeModal = document.querySelector('.modal-close');
+
+  // Seleccionar todas las imágenes de productos-mini
+  const allProductImages = document.querySelectorAll('.productos-mini img');
+
+  allProductImages.forEach(img => {
+    img.addEventListener('click', function(e) {
+      e.stopPropagation();
+      modal.classList.add('active');
+      modalImg.src = this.src;
+      modalImg.alt = this.alt;
+    });
+  });
+
+  // Cerrar modal al hacer clic en la X
+  if (closeModal) {
+    closeModal.addEventListener('click', function() {
+      modal.classList.remove('active');
+    });
+  }
+
+  // Cerrar modal al hacer clic fuera de la imagen
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+    }
+  });
+
+  // ========== BOTONES WHATSAPP ==========
+  const whatsappBtns = document.querySelectorAll('.whatsapp-btn');
+  whatsappBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      window.open('https://wa.me/51998224145?text=Hola,%20me%20interesa%20información%20sobre%20sus%20productos', '_blank');
+    });
+  });
+</script>
+
+</body>
+</html>
